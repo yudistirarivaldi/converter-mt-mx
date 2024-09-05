@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MT to MX Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: vertical;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+        }
+
+        .column {
+            flex: 1;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>SWIFT MT to MX Converter</h1>
+
+        <!-- Dropdown to select the type of MT -->
+        <div class="form-group">
+            <label for="mtType">Select MT Type:</label>
+            <select id="mtType">
+                <option value="mt101">MT101 - Payment Request</option>
+                <option value="mt103">MT103 - Single Customer Credit Transfer</option>
+            </select>
+        </div>
+
+        <!-- Row for input MT and output MX message -->
+        <div class="row">
+            <div class="column">
+                <!-- Text area for input MT Message -->
+                <div class="form-group">
+                    <label for="mtInput">MT Message (SWIFT Format):</label>
+                    <textarea id="mtInput" rows="15" placeholder="Enter your MT message here..."></textarea>
+                </div>
+            </div>
+            <div class="column">
+                <!-- Area to display the MX result -->
+                <div class="form-group">
+                    <label for="mxOutput">MX Message (ISO 20022 Format):</label>
+                    <textarea id="mxOutput" rows="15" readonly></textarea>
+                </div>
+            </div>
+        </div>
+
+        <button id="convertBtn">Convert to MX</button>
+    </div>
+
+    <script src="./mt101.js"></script>
+    <script src="./mt103.js"></script>
+    <script>
+        document.getElementById('convertBtn').addEventListener('click', function () {
+            const mtType = document.getElementById('mtType').value;
+            const mtMessage = document.getElementById('mtInput').value;
+            let mxMessage = '';
+
+            if (mtType === 'mt101') {
+                mxMessage = convertMT101toMX(mtMessage);
+            } else if (mtType === 'mt103') {
+                mxMessage = convertMT103toMX(mtMessage);
+            }
+
+            // Display the MX message in the output textarea
+            document.getElementById('mxOutput').value = mxMessage;
+        });
+    </script>
+</body>
+
+</html>
